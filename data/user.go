@@ -102,4 +102,3 @@ func (e *UserExistsError) Error() string {
 func NewUserExistsError(message string) *UserExistsError {
 	return &UserExistsError{Message: message}
 }
-

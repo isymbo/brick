@@ -26,7 +26,7 @@ func main() {
 		Table:    "sessions",
 	})
 	store = session.New(session.Config{
-		Storage: storage,
+		Storage:        storage,
 		CookieHTTPOnly: true,
 		CookieSameSite: "Lax",
 		Expiration:     24 * time.Hour, // Sessions expire after 24 hours
@@ -37,8 +37,8 @@ func main() {
 
 	// Add CORS middleware to allow requests from the Svelte dev server
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:8080,http://localhost:5173", // Allow Svelte dev (Vite/Rollup)
-		AllowCredentials: true, // Important for sessions/cookies
+		AllowOrigins:     "http://localhost:8080,http://localhost:5173", // Allow Svelte dev (Vite/Rollup)
+		AllowCredentials: true,                                          // Important for sessions/cookies
 		AllowHeaders:     "Origin, Content-Type, Accept",
 	}))
 
@@ -47,9 +47,9 @@ func main() {
 	// API routes for user management
 	api := app.Group("/api")
 	api.Post("/register", registerUserHandler) // Updated to registerUserHandler
-	api.Post("/login", loginUserHandler)    // Updated to loginUserHandler
-	api.Post("/logout", logoutUserHandler)  // Updated to logoutUserHandler
-	api.Get("/me", getCurrentUserHandler) // New endpoint to get current user
+	api.Post("/login", loginUserHandler)       // Updated to loginUserHandler
+	api.Post("/logout", logoutUserHandler)     // Updated to logoutUserHandler
+	api.Get("/me", getCurrentUserHandler)      // New endpoint to get current user
 	// api.Put("/account", updateUserAccount) // Placeholder, will need auth middleware
 
 	// Test endpoint
@@ -108,10 +108,10 @@ func registerUserHandler(c *fiber.Ctx) error {
 	// Don't send password hash back to client
 	// Create a user response struct if you need more control over the output
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message": "User registered successfully",
-		"user_id": user.ID,
+		"message":  "User registered successfully",
+		"user_id":  user.ID,
 		"username": user.Username,
-		"email": user.Email,
+		"email":    user.Email,
 	})
 }
 
@@ -193,8 +193,8 @@ func getCurrentUserHandler(c *fiber.Ctx) error {
 
 	uid, ok := userID.(int64)
 	if !ok {
-	    // This case should ideally not happen if userID is always stored as int64
-	    log.Printf("Session userID is not int64: %T\n", userID)
+		// This case should ideally not happen if userID is always stored as int64
+		log.Printf("Session userID is not int64: %T\n", userID)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Invalid session data"})
 	}
 
